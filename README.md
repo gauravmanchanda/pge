@@ -2,8 +2,8 @@
 
 ## Reading Material
 
-https://github.com/cheezy/page-object/wiki/page-object
-https://watirwebdriver.com/
+- https://github.com/cheezy/page-object/wiki/page-object
+- https://watirwebdriver.com/
 
 ## Task
 
