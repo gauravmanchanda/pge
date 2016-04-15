@@ -32,7 +32,5 @@ describe Pge do
     # on(Pge::Mailinator::EmailPage) do |page|
     #   expect(page.email_body).to eq(paragraph)
     # end
-
-    123
   end
 end
