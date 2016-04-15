@@ -7,7 +7,7 @@
 
 ## Task
 
-Please complete the task in the comments in the file https://github.com/klobuczek/pge/blob/master/spec/pge_spec.rb using page-object and watir. Please make sure that you clearly encapsulate all page access via Page Objects and do not use watir directly in the spec file.
+Please complete the task in the comments in the file [spec/pge_spec.rb](https://github.com/klobuczek/pge/blob/master/spec/pge_spec.rb) using page-object and watir. Please make sure that you clearly encapsulate all page access via Page Objects and do not use watir directly in the spec file.
 
 ## Solution
 
