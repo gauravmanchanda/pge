@@ -15,22 +15,40 @@ describe Pge do
     subject = Faker::Lorem.words
     body = Faker::Lorem.paragraph
 
-    # on(Pge::PutsMail::NewEmailPage)
-    # fill out the form with the above email, subject and body
-    # send email
-
-    visit(Pge::Mailinator::HomePage) do |page|
-      page.inbox = user_name
-      page.go
+    ## Fill up the email form
+    visit(Pge::PutsMail::NewEmailPage) do |page|
+      page.recipient = email
+      page.add_recipient
+      page.subject = subject
+      ## setValue is CodeMirror's method to fill the Code area
+      page.execute_script("window.editor.setValue('#{body}')")
+      page.send_email
     end
 
-    #verify that there is an email present from putsmail.com
-    #open that email and accept with the 'Yes....' link
-    #verify that now there is an email that you sent
-    #open the email
+    ## Visit the email inbox
+    visit(Pge::Mailinator::EmailPage, using_params: {username: user_name}) do |page|
+      ## Check if there is a permission mail to enable draft emails
+      if page.draft_permission_email?
+        page.draft_permission_email_element.click
+        ## Enable Draft Emails
+        page.wait_until do
+          page.enable_draft?
+        end
+        page.enable_draft
+      end
 
-    # on(Pge::Mailinator::EmailPage) do |page|
-    #   expect(page.email_body).to eq(paragraph)
-    # end
+      ## Refresh page after link is clicked to go back to the inbox page
+      page.refresh
+
+      ## Open the test email received
+      page.wait_until(60, "Email not Received") do
+        page.the_test_email_received?(subject)
+      end
+    end
+
+    on(Pge::Mailinator::EmailPage) do |page|
+      page.test_email_subject_element.click
+      expect(page.the_mail_body).to eq(body)
+    end
   end
 end
