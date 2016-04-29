@@ -44,4 +44,4 @@ RSpec.configure do |config|
   #   expect(@browser.text_field(name: "first_name")).to exist.during(2)
   config.include Watir::RSpec::Matchers
 end
-  
+

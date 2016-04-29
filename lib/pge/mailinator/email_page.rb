@@ -5,6 +5,7 @@ module Pge
 
       page_url 'https://mailinator.com/inbox2.jsp?public_to=<%= params[:username] %>'
 
+      div(:email_from_putsmail, text: /putsmail@putsmail/)
       div(:draft_permission_email, text: 'Would you like to receive email drafts?')
 
       ## Find link in email body, which is in an iframe
@@ -20,9 +21,14 @@ module Pge
       end
 
       ## Get div accessor dynamically from subject
-      def the_test_email_received?(subject="")
+      def the_test_email_received?(subject)
         self.class.div(:test_email_subject, text: subject.join)
         self.test_email_subject?
+      end
+
+      def open_test_email(subject)
+        self.class.div(:test_email_subject, text: subject.join)
+        self.test_email_subject_element.click
       end
     end
   end

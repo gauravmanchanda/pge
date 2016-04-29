@@ -28,6 +28,13 @@ describe Pge do
     ## Visit the email inbox
     visit(Pge::Mailinator::EmailPage, using_params: {username: user_name}) do |page|
       ## Check if there is a permission mail to enable draft emails
+      begin
+        page.wait_until(30, "No confirmation email sent") do
+          page.draft_permission_email?
+        end
+      rescue
+      end
+
       if page.draft_permission_email?
         page.draft_permission_email_element.click
         ## Enable Draft Emails
@@ -35,19 +42,24 @@ describe Pge do
           page.enable_draft?
         end
         page.enable_draft
+        ## Close the popup window created by Enable Drafts link
+        browser.window(:title, 'Opt In — Litmus PutsMail').close
       end
 
       ## Refresh page after link is clicked to go back to the inbox page
       page.refresh
-
       ## Open the test email received
       page.wait_until(60, "Email not Received") do
         page.the_test_email_received?(subject)
       end
+      page.test_email_subject_element.click
     end
 
     on(Pge::Mailinator::EmailPage) do |page|
-      page.test_email_subject_element.click
+      # Wait until email body is rendered
+      page.wait_until do
+        !page.the_mail_body.empty?
+      end
       expect(page.the_mail_body).to eq(body)
     end
   end
